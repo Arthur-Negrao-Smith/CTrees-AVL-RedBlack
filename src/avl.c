@@ -1,4 +1,5 @@
 #include "include/avl.h"
+#include <stdio.h>
 #include <stdlib.h>
 
 AVLTree *AVL_create() {
@@ -58,4 +59,45 @@ Bool AVL_isEmpty(AVLTree *tree) {
 
   // isn't empty
   return FALSE;
+}
+
+void AVL_visitLeft(AVLNode *node) {
+  // stop condition
+  if (!node)
+    return;
+
+  AVL_visitLeft(node->left);
+
+  printf("%f ", node->data);
+
+  AVL_visitLeft(node->right);
+}
+
+void AVL_visitRight(AVLNode *node) {
+  // stop condition
+  if (!node)
+    return;
+
+  AVL_visitRight(node->right);
+
+  printf("%f ", node->data);
+
+  AVL_visitRight(node->left);
+}
+
+void AVL_print(AVLTree *tree, AVLOrder order) {
+  if (!tree)
+    return;
+
+  printf("[ ");
+
+  if (order == NORMAL_ORDER) {
+    AVL_visitLeft(tree->root);
+
+  } else if (order == REVERSE_ORDER) {
+    AVL_visitRight(tree->root);
+  }
+
+  printf("]");
+  return;
 }

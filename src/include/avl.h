@@ -1,7 +1,7 @@
 #ifndef AVL_TREE_H
 #define AVL_TREE_H
 
-typedef enum { NORMAL, REVERSE } AVLOrder;
+typedef enum { NORMAL_ORDER, REVERSE_ORDER } AVLOrder;
 typedef enum { FALSE = 0, TRUE = 1 } Bool;
 
 /**
@@ -42,5 +42,7 @@ int AVL_doubleRightRotation(AVLNode *child, AVLNode *father,
                             AVLNode *grandfather, AVLTree *tree);
 
 void AVL_print(AVLTree *tree, AVLOrder order);
+void AVL_visitLeft(AVLNode *node);
+void AVL_visitRight(AVLNode *node);
 
 #endif
