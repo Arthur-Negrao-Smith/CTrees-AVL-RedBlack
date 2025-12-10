@@ -2,6 +2,7 @@
 #define AVL_TREE_H
 
 typedef enum { NORMAL, REVERSE } AVLOrder;
+typedef enum { FALSE = 0, TRUE = 1 } Bool;
 
 /**
  * @brief Struct to represent the AVL node
@@ -24,9 +25,12 @@ typedef struct {
 AVLTree *AVL_create();
 AVLNode *AVL_createNode(float data);
 
-int AVL_isEmpty(AVLTree *tree);
-int AVL_insert(float data, AVLTree *tree);
-int AVL_remove(float data, AVLTree *tree);
+Bool AVL_isEmpty(AVLTree *tree);
+Bool AVL_insert(float data, AVLTree *tree);
+Bool AVL_remove(float data, AVLTree *tree);
+
+Bool AVL_addLeftNode(AVLNode *father, AVLNode *child);
+Bool AVL_addRightNode(AVLNode *father, AVLNode *child);
 
 int AVL_leftRotation(AVLNode *child, AVLNode *father, AVLNode *grandfather,
                      AVLTree *tree);

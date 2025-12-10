@@ -31,15 +31,31 @@ AVLNode *AVL_createNode(float data) {
   return node;
 }
 
-int AVL_isEmpty(AVLTree *tree) {
+Bool AVL_addLeftNode(AVLNode *father, AVLNode *child) {
+  if (!father)
+    return FALSE;
+
+  father->left = child;
+  return TRUE;
+}
+
+Bool AVL_addRightNode(AVLNode *father, AVLNode *child) {
+  if (!father)
+    return FALSE;
+
+  father->right = child;
+  return TRUE;
+}
+
+Bool AVL_isEmpty(AVLTree *tree) {
   // if the pointer is null
   if (!tree)
-    return 1;
+    return TRUE;
 
   // if the tree don't have a root
   if (!tree->root)
-    return 1;
+    return TRUE;
 
   // isn't empty
-  return 0;
+  return FALSE;
 }
