@@ -151,13 +151,47 @@ Bool AVL_leftRotate(AVLNode *node);
  * NULL pointer, else returns TRUE
  */
 Bool AVL_rightRotate(AVLNode *node);
-int AVL_doubleLeftRotate(AVLNode *child, AVLNode *father, AVLNode *grandfather,
-                         AVLTree *tree);
-int AVL_doubleRightRotate(AVLNode *child, AVLNode *father, AVLNode *grandfather,
-                          AVLTree *tree);
 
+/**
+ * @Brief Do a double left rotate in tree
+ *
+ * @param node Target to rotate
+ *
+ * @return Returns FALSE if the node is a NULL pointer or the right node is a
+ * NULL pointer, else returns TRUE
+ */
+Bool AVL_doubleLeftRotate(AVLNode *node);
+
+/**
+ * @Brief Do a double right rotate in tree
+ *
+ * @param node Target to rotate
+ *
+ * @return Returns FALSE if the node is a NULL pointer or the left node is a
+ * NULL pointer, else returns TRUE
+ */
+Bool AVL_doubleRightRotate(AVLNode *node);
+
+/**
+ * @brief Print the entire avl tree in defined order
+ *
+ * @param tree The target tree to print
+ * @param order The order to print
+ */
 void AVL_print(AVLTree *tree, AVLOrder order);
+
+/*
+ * @brief Print node recursively in ascending order
+ *
+ * @param node The target node to recursively print in ascending order
+ */
 void AVL_visitLeft(AVLNode *node);
+
+/*
+ * @brief Print node recursively in descending order
+ *
+ * @param node The target node to recursively print in descending order
+ */
 void AVL_visitRight(AVLNode *node);
 
 #endif

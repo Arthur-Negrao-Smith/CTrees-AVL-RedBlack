@@ -165,6 +165,34 @@ Bool AVL_rightRotate(AVLNode *node) {
   return TRUE;
 }
 
+Bool AVL_doubleLeftRotate(AVLNode *node) {
+  if (!node)
+    return FALSE;
+
+  if (!node->right)
+    return FALSE;
+
+  // do the double rotation
+  AVL_rightRotate(node);
+  AVL_leftRotate(node);
+
+  return TRUE;
+}
+
+Bool AVL_doubleRightRotate(AVLNode *node) {
+  if (!node)
+    return FALSE;
+
+  if (!node->left)
+    return FALSE;
+
+  // do the double rotation
+  AVL_leftRotate(node);
+  AVL_rightRotate(node);
+
+  return TRUE;
+}
+
 AVLNode *AVL_insert(float data, AVLTree *tree) {
   if (!tree)
     return NULL;
