@@ -34,6 +34,8 @@ float max(float a, float b);
 
 /**
  * @Brief Create a AVL tree
+ *
+ * @return A AVLTree if the memory allocation works, else returns NULL
  */
 AVLTree *AVL_create();
 
@@ -42,7 +44,7 @@ AVLTree *AVL_create();
  *
  * @param data Information to add in node
  *
- * @return The current node with the data
+ * @return A AVLNode if the memory allocation works, else returns NULL
  */
 AVLNode *AVL_createNode(float data);
 
@@ -57,15 +59,77 @@ Bool AVL_isEmpty(AVLTree *tree);
 AVLNode *AVL_insert(float data, AVLTree *tree);
 Bool AVL_remove(float data, AVLTree *tree);
 AVLNode *AVL_search(float data);
+
+/**
+ * @Brief Destroy the entire tree recursively
+ *
+ * @param tree The target tree to destroy
+ */
 void AVL_destroyTree(AVLTree *tree);
+
+/**
+ * @Brief Destroy a AVL node
+ *
+ * @param node The target node to destroy
+ */
 void AVL_destroyNode(AVLNode *node);
+
+/**
+ * @Brief Destroy the all nodes bellow (left and right) recursively
+ *
+ * @param node The first target node to destroy
+ */
 void AVL_destroyNodes(AVLNode *node);
 
+/**
+ * @Brief Get the max depth of the tree
+ *
+ * @param tree The tree to calculate the depth
+ *
+ * @return A number of levels (The root is depth 0)
+ */
 int AVL_getDepth(AVLTree *tree);
+
+/**
+ * @Brief Get hight of a node
+ *
+ * @param node Target node to get your height
+ *
+ * @return A int with the current height
+ */
 int AVL_getHeight(AVLNode *node);
+
+/**
+ * @Brief Get the balance factor from a target node
+ *
+ * @param father The target node to receive a child
+ * @param child The child node to add
+ *
+ * @return Returns the balance factor from the target node
+ */
 int AVL_getBalanceFactor(AVLNode *node);
 
+/**
+ * @Brief Add a child node on the left of target father node
+ * * If the target node already have a left node, then the
+ * * entire left subtree will be destroyed
+ *
+ * @param father The target node to receive a child
+ * @param child The child node to add
+ *
+ * @return Returns FALSE if the father node is a NULL pointer, else returns TRUE
+ */
 Bool AVL_addLeftNode(AVLNode *father, AVLNode *child);
+
+/**
+ * @Brief Add a child node on the right of target father node
+ * * If the target node already have a right node, then the
+ * * entire left subtree will be destroyed
+ *
+ * @param tree The tree to destroy
+ *
+ * @return Returns FALSE if the father node is a NULL pointer, else returns TRUE
+ */
 Bool AVL_addRightNode(AVLNode *father, AVLNode *child);
 
 int AVL_leftRotate(AVLNode *child, AVLNode *father, AVLNode *grandfather,

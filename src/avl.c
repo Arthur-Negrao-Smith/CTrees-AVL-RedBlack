@@ -43,6 +43,7 @@ void AVL_destroyTree(AVLTree *tree) {
   if (!tree)
     return;
 
+  // destroy all tree's nodes recursively
   AVL_destroyNodes(tree->root);
 }
 
@@ -51,9 +52,13 @@ void AVL_destroyNodes(AVLNode *node) {
   if (!node)
     return;
 
+  // cleanup all left nodes recursively
   AVL_destroyNodes(node->left);
+
+  // cleanup all right nodes recursively
   AVL_destroyNodes(node->right);
 
+  // cleanup the current node
   free(node);
 }
 
@@ -68,7 +73,12 @@ Bool AVL_addLeftNode(AVLNode *father, AVLNode *child) {
   if (!father)
     return FALSE;
 
+  // to avoid wild pointer
+  if (father->left)
+    AVL_destroyNodes(father->left);
+
   father->left = child;
+
   return TRUE;
 }
 
@@ -76,7 +86,12 @@ Bool AVL_addRightNode(AVLNode *father, AVLNode *child) {
   if (!father)
     return FALSE;
 
+  // to avoid wild pointer
+  if (father->right)
+    AVL_destroyNodes(father->right);
+
   father->right = child;
+
   return TRUE;
 }
 
