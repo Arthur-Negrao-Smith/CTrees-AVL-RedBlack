@@ -39,6 +39,31 @@ AVLNode *AVL_createNode(float data) {
   return node;
 }
 
+void AVL_destroyTree(AVLTree *tree) {
+  if (!tree)
+    return;
+
+  AVL_destroyNodes(tree->root);
+}
+
+void AVL_destroyNodes(AVLNode *node) {
+  // stop condition
+  if (!node)
+    return;
+
+  AVL_destroyNodes(node->left);
+  AVL_destroyNodes(node->right);
+
+  free(node);
+}
+
+void AVL_destroyNode(AVLNode *node) {
+  if (!node)
+    return;
+
+  free(node);
+}
+
 Bool AVL_addLeftNode(AVLNode *father, AVLNode *child) {
   if (!father)
     return FALSE;

@@ -22,15 +22,44 @@ typedef struct {
   int length;    ///< Number of tree nodes
 } AVLTree;
 
+/**
+ * @Brief Get the max value
+ *
+ * @param a First value to compare
+ * @param b Second value to compare
+ *
+ * @return The largest number
+ */
 float max(float a, float b);
 
+/**
+ * @Brief Create a AVL tree
+ */
 AVLTree *AVL_create();
+
+/**
+ * @Brief Create a AVL node
+ *
+ * @param data Information to add in node
+ *
+ * @return The current node with the data
+ */
 AVLNode *AVL_createNode(float data);
 
+/**
+ * @Brief Check if the AVL is empty
+ *
+ * @param tree The tree to check
+ *
+ * @return Return TRUE if the tree is empty or NULL, else return FALSE
+ */
 Bool AVL_isEmpty(AVLTree *tree);
 AVLNode *AVL_insert(float data, AVLTree *tree);
 Bool AVL_remove(float data, AVLTree *tree);
 AVLNode *AVL_search(float data);
+void AVL_destroyTree(AVLTree *tree);
+void AVL_destroyNode(AVLNode *node);
+void AVL_destroyNodes(AVLNode *node);
 
 int AVL_getDepth(AVLTree *tree);
 int AVL_getHeight(AVLNode *node);
