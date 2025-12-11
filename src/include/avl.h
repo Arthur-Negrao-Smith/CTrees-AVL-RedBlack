@@ -79,7 +79,28 @@ AVLNode *AVL_insert(AVLTree *tree, float data);
 AVLNode *AVL_insertNode(AVLNode *node, float data);
 
 Bool AVL_remove(AVLTree *tree, float data);
+
+/**
+ * @brief Search a data inner the a AVLTree
+ *
+ * @param tree Tree to search
+ * @param data Target data to find
+ *
+ * @return Returns NULL if tree are NULL. Returns NULL if the tree are void.
+ * Returns NULL if the data aren't in the Tree. Else, returns a AVLNode with the
+ * target data
+ */
 AVLNode *AVL_search(AVLTree *tree, float data);
+
+/**
+ * @brief Search a data inner the a AVLNode's subtree recursively
+ *
+ * @param node Node to search inner of node's subtrees
+ * @param data Target data to find
+ *
+ * @return Returns NULL if the data aren't in the Tree, else returns a AVLNode
+ * with the target data
+ */
 AVLNode *AVL_searchNode(AVLNode *node, float data);
 
 /**
