@@ -132,10 +132,25 @@ Bool AVL_addLeftNode(AVLNode *father, AVLNode *child);
  */
 Bool AVL_addRightNode(AVLNode *father, AVLNode *child);
 
-int AVL_leftRotate(AVLNode *child, AVLNode *father, AVLNode *grandfather,
-                   AVLTree *tree);
-int AVL_rightRotate(AVLNode *child, AVLNode *father, AVLNode *grandfather,
-                    AVLTree *tree);
+/**
+ * @Brief Do a left rotate in tree
+ *
+ * @param node Target to rotate
+ *
+ * @return Returns FALSE if the node is a NULL pointer or the right node is a
+ * NULL pointer, else returns TRUE
+ */
+Bool AVL_leftRotate(AVLNode *node);
+
+/**
+ * @Brief Do a right rotate in tree
+ *
+ * @param node Target to rotate
+ *
+ * @return Returns FALSE if the node is a NULL pointer or the left node is a
+ * NULL pointer, else returns TRUE
+ */
+Bool AVL_rightRotate(AVLNode *node);
 int AVL_doubleLeftRotate(AVLNode *child, AVLNode *father, AVLNode *grandfather,
                          AVLTree *tree);
 int AVL_doubleRightRotate(AVLNode *child, AVLNode *father, AVLNode *grandfather,

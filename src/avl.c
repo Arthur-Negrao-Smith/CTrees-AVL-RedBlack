@@ -119,6 +119,52 @@ int AVL_getDepth(AVLTree *tree) {
   return max(AVL_getHeight(tree->root->left), AVL_getHeight(tree->root->right));
 }
 
+Bool AVL_leftRotate(AVLNode *node) {
+  if (!node)
+    return FALSE;
+
+  AVLNode *right_child = node->right;
+  if (!right_child)
+    return FALSE;
+
+  AVLNode *left_of_right_child = right_child->left;
+
+  // realize the rotate
+  AVL_addLeftNode(right_child, node);
+  AVL_addRightNode(node, left_of_right_child);
+
+  // updating the hight
+  node->height = max(AVL_getHeight(node->left), AVL_getHeight(node->right)) + 1;
+  right_child->height =
+      max(AVL_getHeight(right_child->left), AVL_getHeight(right_child->right)) +
+      1;
+
+  return TRUE;
+}
+
+Bool AVL_rightRotate(AVLNode *node) {
+  if (!node)
+    return FALSE;
+
+  AVLNode *left_child = node->left;
+  if (!left_child)
+    return FALSE;
+
+  AVLNode *right_of_left_child = left_child->right;
+
+  // realize the rotate
+  AVL_addRightNode(left_child, node);
+  AVL_addLeftNode(node, right_of_left_child);
+
+  // updating the hight
+  node->height = max(AVL_getHeight(node->left), AVL_getHeight(node->right)) + 1;
+  left_child->height =
+      max(AVL_getHeight(left_child->left), AVL_getHeight(left_child->right)) +
+      1;
+
+  return TRUE;
+}
+
 AVLNode *AVL_insert(float data, AVLTree *tree) {
   if (!tree)
     return NULL;
