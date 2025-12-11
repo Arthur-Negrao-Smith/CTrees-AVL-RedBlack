@@ -10,7 +10,6 @@ AVLTree *AVL_create() {
   if (!tree)
     return NULL;
 
-  tree->depth = 0;
   tree->length = 0;
   tree->root = NULL;
 
@@ -26,6 +25,7 @@ AVLNode *AVL_createNode(float data) {
     return NULL;
 
   node->data = data;
+  node->height = 0;
   node->left = NULL;
   node->right = NULL;
 
@@ -46,6 +46,24 @@ Bool AVL_addRightNode(AVLNode *father, AVLNode *child) {
 
   father->right = child;
   return TRUE;
+}
+
+AVLNode *AVL_insert(float data, AVLTree *tree) {
+  if (!tree)
+    return NULL;
+
+  AVLNode *node = AVL_createNode(data);
+
+  if (!node)
+    return NULL;
+
+  if (!tree->root) {
+    tree->root = node;
+    return node;
+  }
+
+  // TODO: Finalize the function
+  return NULL;
 }
 
 Bool AVL_isEmpty(AVLTree *tree) {
