@@ -9,7 +9,7 @@ typedef enum { FALSE = 0, TRUE = 1 } Bool;
  */
 typedef struct AVLNode {
   float data;            ///< Node's data
-  int height;            ///< Node hight
+  int height;            ///< Node height
   struct AVLNode *left;  ///< Pointer to left node
   struct AVLNode *right; ///< Pointer to right node
 } AVLNode;
@@ -53,11 +53,32 @@ AVLNode *AVL_createNode(float data);
  *
  * @param tree The tree to check
  *
- * @return Return TRUE if the tree is empty or NULL, else return FALSE
+ * @return Returns TRUE if the tree is empty or NULL, else returns FALSE
  */
 Bool AVL_isEmpty(AVLTree *tree);
-AVLNode *AVL_insert(float data, AVLTree *tree);
-Bool AVL_remove(float data, AVLTree *tree);
+
+/**
+ * @Brief Insert a float in the AVLTree
+ *
+ * @param tree The tree to insert a node
+ * @param data The float to insert in tree
+ *
+ * @return Returns NULL if the tree is NULL or if a memory allocation failure
+ * occurred, else returns a AVLNode pointer
+ */
+AVLNode *AVL_insert(AVLTree *tree, float data);
+
+/**
+ * @Brief Insert a node in AVLNode recursively
+ *
+ * @param node The root to insert a node
+ * @param data The float to insert in tree
+ *
+ * @return Returns the inserted node pointer
+ */
+AVLNode *AVL_insertNode(AVLNode *node, float data);
+
+Bool AVL_remove(AVLTree *tree, float data);
 AVLNode *AVL_search(float data);
 
 /**
@@ -91,7 +112,7 @@ void AVL_destroyNodes(AVLNode *node);
 int AVL_getDepth(AVLTree *tree);
 
 /**
- * @Brief Get hight of a node
+ * @Brief Get height of a node
  *
  * @param node Target node to get your height
  *

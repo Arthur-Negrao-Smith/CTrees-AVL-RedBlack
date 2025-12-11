@@ -133,7 +133,7 @@ Bool AVL_leftRotate(AVLNode *node) {
   AVL_addLeftNode(right_child, node);
   AVL_addRightNode(node, left_of_right_child);
 
-  // updating the hight
+  // updating the height
   node->height = max(AVL_getHeight(node->left), AVL_getHeight(node->right)) + 1;
   right_child->height =
       max(AVL_getHeight(right_child->left), AVL_getHeight(right_child->right)) +
@@ -156,7 +156,7 @@ Bool AVL_rightRotate(AVLNode *node) {
   AVL_addRightNode(left_child, node);
   AVL_addLeftNode(node, right_of_left_child);
 
-  // updating the hight
+  // updating the height
   node->height = max(AVL_getHeight(node->left), AVL_getHeight(node->right)) + 1;
   left_child->height =
       max(AVL_getHeight(left_child->left), AVL_getHeight(left_child->right)) +
@@ -193,7 +193,52 @@ Bool AVL_doubleRightRotate(AVLNode *node) {
   return TRUE;
 }
 
-AVLNode *AVL_insert(float data, AVLTree *tree) {
+AVLNode *AVL_insertNode(AVLNode *node, float data) {
+
+  // stop condition
+  if (!node)
+    return AVL_createNode(data);
+
+  // positioning the new node
+  if (data <= node->data)
+    node->left = AVL_insertNode(node->left, data);
+  else
+    node->right = AVL_insertNode(node->right, data);
+
+  // updating the new node height
+  node->height = max(AVL_getHeight(node->left), AVL_getHeight(node->right)) + 1;
+
+  int current_balance = AVL_getBalanceFactor(node);
+
+  // double left case
+  if (current_balance < -1 && data < node->right->data) {
+    AVL_doubleLeftRotate(node);
+    return node->right;
+  }
+
+  // double right case
+  if (current_balance > 1 && data > node->left->data) {
+    AVL_doubleRightRotate(node);
+    return node->left;
+  }
+
+  // left case
+  if (current_balance < -1 && data > node->right->data) {
+    AVL_leftRotate(node);
+    return node->right;
+  }
+
+  // right case
+  if (current_balance > 1 && data < node->left->data) {
+    AVL_doubleRightRotate(node);
+    return node->left;
+  }
+
+  // if the node is already balanced
+  return node;
+}
+
+AVLNode *AVL_insert(AVLTree *tree, float data) {
   if (!tree)
     return NULL;
 
@@ -208,8 +253,16 @@ AVLNode *AVL_insert(float data, AVLTree *tree) {
     return node;
   }
 
-  // TODO: Finalize the function
-  return NULL;
+  // cleanup unused node
+  AVL_destroyNode(node);
+
+  node = AVL_insertNode(tree->root, data);
+
+  // if all occurs ok
+  if (node)
+    tree->length++;
+
+  return node;
 }
 
 Bool AVL_isEmpty(AVLTree *tree) {
