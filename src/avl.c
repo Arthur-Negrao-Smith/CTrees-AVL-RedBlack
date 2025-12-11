@@ -2,6 +2,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+float max(float a, float b) {
+  if (a > b)
+    return a;
+
+  return b;
+}
+
 AVLTree *AVL_create() {
   AVLTree *tree;
   tree = (AVLTree *)malloc(sizeof(AVLTree));
@@ -62,6 +69,16 @@ int AVL_getBalanceFactor(AVLNode *node) {
   return AVL_getHeight(node->left) - AVL_getHeight(node->right);
 }
 
+int AVL_getDepth(AVLTree *tree) {
+  if (!tree)
+    return 0;
+
+  if (!tree->root)
+    return 0;
+
+  return max(AVL_getHeight(tree->root->left), AVL_getHeight(tree->root->right));
+}
+
 AVLNode *AVL_insert(float data, AVLTree *tree) {
   if (!tree)
     return NULL;
@@ -73,6 +90,7 @@ AVLNode *AVL_insert(float data, AVLTree *tree) {
 
   if (!tree->root) {
     tree->root = node;
+    tree->length = 1;
     return node;
   }
 

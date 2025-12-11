@@ -22,6 +22,8 @@ typedef struct {
   int length;    ///< Number of tree nodes
 } AVLTree;
 
+float max(float a, float b);
+
 AVLTree *AVL_create();
 AVLNode *AVL_createNode(float data);
 
@@ -30,6 +32,7 @@ AVLNode *AVL_insert(float data, AVLTree *tree);
 Bool AVL_remove(float data, AVLTree *tree);
 AVLNode *AVL_search(float data);
 
+int AVL_getDepth(AVLTree *tree);
 int AVL_getHeight(AVLNode *node);
 int AVL_getBalanceFactor(AVLNode *node);
 
