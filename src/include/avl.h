@@ -79,7 +79,8 @@ AVLNode *AVL_insert(AVLTree *tree, float data);
 AVLNode *AVL_insertNode(AVLNode *node, float data);
 
 Bool AVL_remove(AVLTree *tree, float data);
-AVLNode *AVL_search(float data);
+AVLNode *AVL_search(AVLTree *tree, float data);
+AVLNode *AVL_searchNode(AVLNode *node, float data);
 
 /**
  * @Brief Destroy the entire tree recursively

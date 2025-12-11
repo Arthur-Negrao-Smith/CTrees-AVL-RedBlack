@@ -247,6 +247,7 @@ AVLNode *AVL_insert(AVLTree *tree, float data) {
   if (!node)
     return NULL;
 
+  // if is the first node
   if (!tree->root) {
     tree->root = node;
     tree->length = 1;
@@ -263,6 +264,35 @@ AVLNode *AVL_insert(AVLTree *tree, float data) {
     tree->length++;
 
   return node;
+}
+
+AVLNode *AVL_searchNode(AVLNode *node, float data) {
+  // stop condition: if the tree don't have the data
+  if (!node)
+    return NULL;
+
+  // if the data is greater than the data of the current node
+  if (data < node->data)
+    return AVL_searchNode(node->left, data);
+
+  // if the data is less than the data of the current node
+  if (data > node->data)
+    return AVL_searchNode(node->right, data);
+
+  // if the node have the searched data
+  return node;
+}
+
+AVLNode *AVL_search(AVLTree *tree, float data) {
+  // if the tree is NULL
+  if (!tree)
+    return NULL;
+
+  // if the tree is void
+  if (!tree->root)
+    return NULL;
+
+  return AVL_searchNode(tree->root, data);
 }
 
 Bool AVL_isEmpty(AVLTree *tree) {
