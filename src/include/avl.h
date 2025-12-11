@@ -30,8 +30,8 @@ AVLNode *AVL_insert(float data, AVLTree *tree);
 Bool AVL_remove(float data, AVLTree *tree);
 AVLNode *AVL_search(float data);
 
-int getHeight(AVLNode *node);
-int getBalanceFactor(AVLNode *node);
+int AVL_getHeight(AVLNode *node);
+int AVL_getBalanceFactor(AVLNode *node);
 
 Bool AVL_addLeftNode(AVLNode *father, AVLNode *child);
 Bool AVL_addRightNode(AVLNode *father, AVLNode *child);

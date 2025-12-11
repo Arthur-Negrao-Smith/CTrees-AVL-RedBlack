@@ -48,6 +48,20 @@ Bool AVL_addRightNode(AVLNode *father, AVLNode *child) {
   return TRUE;
 }
 
+int AVL_getHeight(AVLNode *node) {
+  if (!node)
+    return 0;
+
+  return node->height;
+}
+
+int AVL_getBalanceFactor(AVLNode *node) {
+  if (!node)
+    return 0;
+
+  return AVL_getHeight(node->left) - AVL_getHeight(node->right);
+}
+
 AVLNode *AVL_insert(float data, AVLTree *tree) {
   if (!tree)
     return NULL;
