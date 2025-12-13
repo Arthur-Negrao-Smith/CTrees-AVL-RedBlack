@@ -36,7 +36,7 @@ float max(float a, float b);
 /**
  * @brief Create a AVL tree
  *
- * @return A AVLTree if the memory allocation works, else returns NULL
+ * @return A AVLTree if the memory allocation works. Otherwise, returns NULL
  */
 AVLTree *AVL_create();
 
@@ -45,7 +45,7 @@ AVLTree *AVL_create();
  *
  * @param data Information to add in node
  *
- * @return A AVLNode if the memory allocation works, else returns NULL
+ * @return A AVLNode if the memory allocation works. Otherwise, returns NULL
  */
 AVLNode *AVL_createNode(float data);
 
@@ -54,12 +54,25 @@ AVLNode *AVL_createNode(float data);
  *
  * @param tree The tree to check
  *
- * @return Returns TRUE if the tree is empty or NULL, else returns FALSE
+ * @return Returns TRUE if the tree is empty or NULL. Otherwise, returns FALSE
  */
 Bool AVL_isEmpty(AVLTree *tree);
 
+/**
+ * @brief Update the height of a target node
+ *
+ * @param node Target node to update
+ */
 void AVL_updateHeight(AVLNode *node);
 
+/**
+ * @brief If necessary balance the local tree
+ *
+ * @param node Node to balance
+ *
+ * @return If node is NULL or the node don't have childs, then returns NULL.
+ * Otherwise, returns new locally root
+ */
 AVLNode *AVL_balanceLocally(AVLNode *node);
 
 /**
@@ -69,7 +82,7 @@ AVLNode *AVL_balanceLocally(AVLNode *node);
  * @param data The float to insert in tree
  *
  * @return Returns NULL if the tree is NULL or if a memory allocation failure
- * occurred, else returns a AVLNode pointer
+ * occurred. Otherwise, returns a new tree root pointer
  */
 AVLNode *AVL_insert(AVLTree *tree, float data);
 
@@ -77,16 +90,43 @@ AVLNode *AVL_insert(AVLTree *tree, float data);
  * @brief Insert a node in AVLNode recursively
  *
  * @param node The root to insert a node
- * @param data The float to insert in tree
+ * @param data The float to insert in the tree
  *
- * @return Returns the inserted node pointer
+ * @return If node is NULL, then returns NULL. Otherwise, returns the new local
+ * root
  */
 AVLNode *AVL_insertNode(AVLNode *node, float data);
 
+/**
+ * @brief Remove a tree node
+ *
+ * @param tree Tree to remove a node
+ * @param data Data of the node to remove
+ *
+ * @return If the tree is NULL or empty or the the tree don't has this value,
+ * then returns NULL. Otherwise, returns the new root tree
+ */
 AVLNode *AVL_remove(AVLTree *tree, float data);
 
+/**
+ * @brief Remove a node of the a subtree
+ *
+ * @param node Current root to search the node
+ * @param data Data of the node to remove
+ *
+ * @return If the node is NULL or empty or the subtree don't has this value,
+ * then returns NULL. Otherwise, returns the new local root
+ */
 AVLNode *AVL_removeNode(AVLNode *node, float data);
 
+/**
+ * @brief Find the min value tree node
+ *
+ * @param node Root node of the subtree
+ *
+ * @return If node is NULL, then returns NULL. Otherwise, returns the min node
+ * of the subtree.
+ */
 AVLNode *AVL_findMinNode(AVLNode *node);
 
 /**
