@@ -10,6 +10,7 @@ typedef enum { FALSE = 0, TRUE = 1 } Bool;
 typedef struct AVLNode {
   float data;            ///< Node's data
   int height;            ///< Node height
+  int frequency;         ///< Frequency at which the node repeats
   struct AVLNode *left;  ///< Pointer to left node
   struct AVLNode *right; ///< Pointer to right node
 } AVLNode;

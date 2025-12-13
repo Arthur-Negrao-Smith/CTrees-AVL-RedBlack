@@ -33,6 +33,7 @@ AVLNode *AVL_createNode(float data) {
 
   node->data = data;
   node->height = 0;
+  node->frequency = 1;
   node->left = NULL;
   node->right = NULL;
 
@@ -69,28 +70,28 @@ void AVL_destroyNode(AVLNode *node) {
   free(node);
 }
 
-Bool AVL_addLeftNode(AVLNode *father, AVLNode *child, Bool destructive) {
-  if (!father)
+Bool AVL_addLeftNode(AVLNode *parent, AVLNode *child, Bool destructive) {
+  if (!parent)
     return FALSE;
 
   // to avoid memory leaks
-  if (father->left && destructive)
-    AVL_destroyNodes(father->left);
+  if (parent->left && destructive)
+    AVL_destroyNodes(parent->left);
 
-  father->left = child;
+  parent->left = child;
 
   return TRUE;
 }
 
-Bool AVL_addRightNode(AVLNode *father, AVLNode *child, Bool destructive) {
-  if (!father)
+Bool AVL_addRightNode(AVLNode *parent, AVLNode *child, Bool destructive) {
+  if (!parent)
     return FALSE;
 
   // to avoid memory leaks
-  if (father->right && destructive)
-    AVL_destroyNodes(father->right);
+  if (parent->right && destructive)
+    AVL_destroyNodes(parent->right);
 
-  father->right = child;
+  parent->right = child;
 
   return TRUE;
 }
@@ -201,10 +202,14 @@ AVLNode *AVL_insertNode(AVLNode *node, float data) {
 
   // TODO: Implement frequency
   // positioning the new node
-  if (data <= node->data)
+  if (data < node->data) {
     node->left = AVL_insertNode(node->left, data);
-  else
+  } else if (data > node->data) {
     node->right = AVL_insertNode(node->right, data);
+  } else {
+    node->frequency++;
+    return node;
+  }
 
   // updating the new node height
   node->height = max(AVL_getHeight(node->left), AVL_getHeight(node->right)) + 1;
@@ -212,28 +217,20 @@ AVLNode *AVL_insertNode(AVLNode *node, float data) {
   int current_balance = AVL_getBalanceFactor(node);
 
   // double left case
-  if (current_balance < -1 && data < node->right->data) {
-    AVL_doubleLeftRotate(node);
-    return node->right;
-  }
+  if (current_balance < -1 && data < node->right->data)
+    return AVL_doubleLeftRotate(node);
 
   // double right case
-  if (current_balance > 1 && data > node->left->data) {
-    AVL_doubleRightRotate(node);
-    return node->left;
-  }
+  if (current_balance > 1 && data > node->left->data)
+    return AVL_doubleRightRotate(node);
 
   // left case
-  if (current_balance < -1 && data > node->right->data) {
-    AVL_leftRotate(node);
-    return node->right;
-  }
+  if (current_balance < -1 && data > node->right->data)
+    return AVL_leftRotate(node);
 
   // right case
-  if (current_balance > 1 && data < node->left->data) {
-    AVL_doubleRightRotate(node);
-    return node->left;
-  }
+  if (current_balance > 1 && data < node->left->data)
+    return AVL_doubleRightRotate(node);
 
   // if the node is already balanced
   return node;
@@ -271,7 +268,7 @@ AVLNode *AVL_insert(AVLTree *tree, float data) {
   return node;
 }
 
-AVLNode *findMinNode(AVLNode *node) {
+AVLNode *AVL_findMinNode(AVLNode *node) {
   // invalid argument (node) passed
   if (!node)
     return NULL;
@@ -388,7 +385,8 @@ void AVL_visitLeft(AVLNode *node) {
 
   AVL_visitLeft(node->left);
 
-  printf("%f ", node->data);
+  for (int i = node->frequency; i > 0; i--)
+    printf("%f ", node->data);
 
   AVL_visitLeft(node->right);
 }
@@ -400,7 +398,8 @@ void AVL_visitRight(AVLNode *node) {
 
   AVL_visitRight(node->right);
 
-  printf("%f ", node->data);
+  for (int i = node->frequency; i > 0; i--)
+    printf("%f ", node->data);
 
   AVL_visitRight(node->left);
 }
