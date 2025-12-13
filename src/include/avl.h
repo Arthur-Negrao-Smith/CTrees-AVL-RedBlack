@@ -58,6 +58,10 @@ AVLNode *AVL_createNode(float data);
  */
 Bool AVL_isEmpty(AVLTree *tree);
 
+void AVL_updateHeight(AVLNode *node);
+
+AVLNode *AVL_balanceLocally(AVLNode *node);
+
 /**
  * @brief Insert a float in the AVLTree
  *
@@ -225,7 +229,8 @@ AVLNode *AVL_doubleLeftRotate(AVLNode *node);
  * @param node Target to rotate
  *
  * @return Returns NULL if the node is a NULL pointer or the left node is a
- * NULL pointer, else returns the right child of the left node (new local root)
+ * NULL pointer, else returns the right child of the left node (new local
+ * root)
  */
 AVLNode *AVL_doubleRightRotate(AVLNode *node);
 

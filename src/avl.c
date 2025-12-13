@@ -194,13 +194,49 @@ AVLNode *AVL_doubleRightRotate(AVLNode *node) {
   return node;
 }
 
+void AVL_updateHeight(AVLNode *node) {
+  if (!node)
+    return;
+
+  node->height = 1 + max(AVL_getHeight(node->left), AVL_getHeight(node->right));
+}
+
+AVLNode *AVL_balanceLocally(AVLNode *node) {
+  if (!node)
+    return NULL;
+
+  // if node don't have childs
+  if (!node->left && !node->right)
+    return node;
+
+  int balance = AVL_getBalanceFactor(node);
+  // right rotate cases
+  if (balance > 1) {
+
+    if (AVL_getBalanceFactor(node->left) >= 0)
+      return AVL_rightRotate(node);
+
+    else
+      return AVL_doubleRightRotate(node);
+
+    // left rotate cases
+  } else if (balance < -1) {
+
+    if (AVL_getBalanceFactor(node->right) <= 0)
+      return AVL_leftRotate(node);
+    else
+      return AVL_doubleLeftRotate(node);
+  }
+
+  return node;
+}
+
 AVLNode *AVL_insertNode(AVLNode *node, float data) {
 
   // stop condition
   if (!node)
     return AVL_createNode(data);
 
-  // TODO: Implement frequency
   // positioning the new node
   if (data < node->data) {
     node->left = AVL_insertNode(node->left, data);
@@ -212,25 +248,10 @@ AVLNode *AVL_insertNode(AVLNode *node, float data) {
   }
 
   // updating the new node height
-  node->height = max(AVL_getHeight(node->left), AVL_getHeight(node->right)) + 1;
+  AVL_updateHeight(node);
 
-  int current_balance = AVL_getBalanceFactor(node);
-
-  // double left case
-  if (current_balance < -1 && data < node->right->data)
-    return AVL_doubleLeftRotate(node);
-
-  // double right case
-  if (current_balance > 1 && data > node->left->data)
-    return AVL_doubleRightRotate(node);
-
-  // left case
-  if (current_balance < -1 && data > node->right->data)
-    return AVL_leftRotate(node);
-
-  // right case
-  if (current_balance > 1 && data < node->left->data)
-    return AVL_doubleRightRotate(node);
+  // balance if necessary
+  node = AVL_balanceLocally(node);
 
   // if the node is already balanced
   return node;
@@ -286,35 +307,59 @@ AVLNode *AVL_removeNode(AVLNode *node, float data) {
   if (!node)
     return NULL;
 
-  AVLNode *removed_node;
   // if the data is less than data of the current node
   if (data < node->data) {
-    removed_node = AVL_removeNode(node->left, data);
+    node->left = AVL_removeNode(node->left, data);
 
     // if the data is greater than data of the current node
   } else if (data > node->data) {
-    removed_node = AVL_removeNode(node->right, data);
+    node->right = AVL_removeNode(node->right, data);
 
     // else the current node is the correct
   } else {
 
     AVLNode *aux_node;
-    // have two childrens
-    if (node->left && node->right) {
-      aux_node = AVL_findMinNode(node->right);
+    if (node->frequency <= 1) {
+      // have two childrens
+      if (node->left && node->right) {
+        aux_node = AVL_findMinNode(node->right);
 
-      node->data = aux_node->data;
+        node->data = aux_node->data;
 
-      // remove the min node
-      node->right = AVL_removeNode(node->right, aux_node->data);
+        // remove the min node
+        node->right = AVL_removeNode(node->right, aux_node->data);
 
-      // don't have childrens
-    } else if (!node->left && !node->right)
+        // have one child
+      } else if (node->left || node->right) {
 
-      removed_node = node;
+        aux_node = node->left ? node->left : node->right;
+        *node = *aux_node; // copying the entire content
+
+        AVL_destroyNode(aux_node);
+
+        // don't have childrens
+      } else {
+
+        // just destroy the node
+        AVL_destroyNode(node);
+        node = NULL;
+        return NULL;
+      }
+
+      // if has more than 1 node with the same value
+    } else {
+      node->frequency--; // decrease the frequency
+      return node;
+    }
   }
 
-  return removed_node;
+  // update the node height
+  AVL_updateHeight(node);
+
+  // balance if necessary
+  node = AVL_balanceLocally(node);
+
+  return node;
 }
 
 AVLNode *AVL_remove(AVLTree *tree, float data) {
@@ -330,9 +375,13 @@ AVLNode *AVL_remove(AVLTree *tree, float data) {
   if (!node)
     return NULL;
 
-  // TODO: Finalize the Remove and update the tree root
+  // decrease the root counter
+  tree->length--;
 
-  // removed node
+  // update the root
+  tree->root = node;
+
+  // return new root
   return node;
 }
 
