@@ -6,9 +6,12 @@ INCLUDE = ./include
 TARGET = src/main
 LIBS = src/avl.o
 
-.PHONY: all clean
+.PHONY: all clean run
 
 all:	$(TARGET)
+
+run:	all
+	./$(TARGET)
 
 %.o:	%.c
 	$(CC) $(CFLAGS) -c $< -o $@ -I $(INCLUDE)
