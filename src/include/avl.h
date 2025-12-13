@@ -23,7 +23,7 @@ typedef struct {
 } AVLTree;
 
 /**
- * @Brief Get the max value
+ * @brief Get the max value
  *
  * @param a First value to compare
  * @param b Second value to compare
@@ -33,14 +33,14 @@ typedef struct {
 float max(float a, float b);
 
 /**
- * @Brief Create a AVL tree
+ * @brief Create a AVL tree
  *
  * @return A AVLTree if the memory allocation works, else returns NULL
  */
 AVLTree *AVL_create();
 
 /**
- * @Brief Create a AVL node
+ * @brief Create a AVL node
  *
  * @param data Information to add in node
  *
@@ -49,7 +49,7 @@ AVLTree *AVL_create();
 AVLNode *AVL_createNode(float data);
 
 /**
- * @Brief Check if the AVL is empty
+ * @brief Check if the AVL is empty
  *
  * @param tree The tree to check
  *
@@ -58,7 +58,7 @@ AVLNode *AVL_createNode(float data);
 Bool AVL_isEmpty(AVLTree *tree);
 
 /**
- * @Brief Insert a float in the AVLTree
+ * @brief Insert a float in the AVLTree
  *
  * @param tree The tree to insert a node
  * @param data The float to insert in tree
@@ -69,7 +69,7 @@ Bool AVL_isEmpty(AVLTree *tree);
 AVLNode *AVL_insert(AVLTree *tree, float data);
 
 /**
- * @Brief Insert a node in AVLNode recursively
+ * @brief Insert a node in AVLNode recursively
  *
  * @param node The root to insert a node
  * @param data The float to insert in tree
@@ -78,7 +78,11 @@ AVLNode *AVL_insert(AVLTree *tree, float data);
  */
 AVLNode *AVL_insertNode(AVLNode *node, float data);
 
-Bool AVL_remove(AVLTree *tree, float data);
+AVLNode *AVL_remove(AVLTree *tree, float data);
+
+AVLNode *AVL_removeNode(AVLNode *node, float data);
+
+AVLNode *AVL_findMinNode(AVLNode *node);
 
 /**
  * @brief Search a data inner the a AVLTree
@@ -87,8 +91,8 @@ Bool AVL_remove(AVLTree *tree, float data);
  * @param data Target data to find
  *
  * @return Returns NULL if tree are NULL. Returns NULL if the tree are void.
- * Returns NULL if the data aren't in the Tree. Else, returns a AVLNode with the
- * target data
+ * Returns NULL if the data aren't in the Tree. Else, returns a AVLNode with
+ * the target data
  */
 AVLNode *AVL_search(AVLTree *tree, float data);
 
@@ -104,28 +108,28 @@ AVLNode *AVL_search(AVLTree *tree, float data);
 AVLNode *AVL_searchNode(AVLNode *node, float data);
 
 /**
- * @Brief Destroy the entire tree recursively
+ * @brief Destroy the entire tree recursively
  *
  * @param tree The target tree to destroy
  */
 void AVL_destroyTree(AVLTree *tree);
 
 /**
- * @Brief Destroy a AVL node
+ * @brief Destroy a AVL node
  *
  * @param node The target node to destroy
  */
 void AVL_destroyNode(AVLNode *node);
 
 /**
- * @Brief Destroy the all nodes bellow (left and right) recursively
+ * @brief Destroy the all nodes bellow (left and right) recursively
  *
  * @param node The first target node to destroy
  */
 void AVL_destroyNodes(AVLNode *node);
 
 /**
- * @Brief Get the max depth of the tree
+ * @brief Get the max depth of the tree
  *
  * @param tree The tree to calculate the depth
  *
@@ -134,7 +138,7 @@ void AVL_destroyNodes(AVLNode *node);
 int AVL_getDepth(AVLTree *tree);
 
 /**
- * @Brief Get height of a node
+ * @brief Get height of a node
  *
  * @param node Target node to get your height
  *
@@ -143,77 +147,86 @@ int AVL_getDepth(AVLTree *tree);
 int AVL_getHeight(AVLNode *node);
 
 /**
- * @Brief Get the balance factor from a target node
+ * @brief Get the balance factor from a target node
  *
- * @param father The target node to receive a child
- * @param child The child node to add
+ * @param node Node to get your balance
  *
  * @return Returns the balance factor from the target node
  */
 int AVL_getBalanceFactor(AVLNode *node);
 
 /**
- * @Brief Add a child node on the left of target father node
- * * If the target node already have a left node, then the
- * * entire left subtree will be destroyed
+ * @brief Add a child node on the left of the target parent node
+ * * If the target node already has a left node, then the
+ * * entire left subtree will be freed
  *
- * @param father The target node to receive a child
+ * @param parent The target node to receive a child
  * @param child The child node to add
+ * @param destructive When TRUE, the existing left subtree of the parent
+ * node is freed before assigning the new child
  *
- * @return Returns FALSE if the father node is a NULL pointer, else returns TRUE
+ * @return Returns FALSE if the parent node is a NULL pointer. Otherwise,
+ * returns TRUE
  */
-Bool AVL_addLeftNode(AVLNode *father, AVLNode *child);
+Bool AVL_addLeftNode(AVLNode *parent, AVLNode *child, Bool destructive);
 
 /**
- * @Brief Add a child node on the right of target father node
- * * If the target node already have a right node, then the
- * * entire left subtree will be destroyed
+ * @brief Add a child node on the right of the target parent node
+ * * If the target node already has a right node, then the
+ * * entire left subtree will be freed
  *
- * @param tree The tree to destroy
+ * @param parent The target node to receive a child
+ * @param child The child node to add
+ * @param destructive When TRUE, the existing right subtree of the parent
+ * node is freed before assigning the new child
  *
- * @return Returns FALSE if the father node is a NULL pointer, else returns TRUE
+ * @return Returns FALSE if the parent node is a NULL pointer. Otherwise,
+ * returns TRUE
  */
-Bool AVL_addRightNode(AVLNode *father, AVLNode *child);
+Bool AVL_addRightNode(AVLNode *parent, AVLNode *child, Bool destructive);
 
 /**
- * @Brief Do a left rotate in tree
+ * @brief Do a left rotate in tree
  *
  * @param node Target to rotate
  *
  * @return Returns FALSE if the node is a NULL pointer or the right node is a
  * NULL pointer, else returns TRUE
+ *
+ * @return Returns NULL if the node is a NULL pointer or the left node is a
+ * NULL pointer, else returns the right child node (new local root)
  */
-Bool AVL_leftRotate(AVLNode *node);
+AVLNode *AVL_leftRotate(AVLNode *node);
 
 /**
- * @Brief Do a right rotate in tree
+ * @brief Do a right rotate in tree
  *
  * @param node Target to rotate
  *
- * @return Returns FALSE if the node is a NULL pointer or the left node is a
- * NULL pointer, else returns TRUE
+ * @return Returns NULL if the node is a NULL pointer or the left node is a
+ * NULL pointer, else returns the left child node (new local root)
  */
-Bool AVL_rightRotate(AVLNode *node);
+AVLNode *AVL_rightRotate(AVLNode *node);
 
 /**
- * @Brief Do a double left rotate in tree
+ * @brief Do a double left rotate in tree
  *
  * @param node Target to rotate
  *
- * @return Returns FALSE if the node is a NULL pointer or the right node is a
- * NULL pointer, else returns TRUE
+ * @return Returns NULL if the node is a NULL pointer or the left node is a
+ * NULL pointer, else returns the left child of right node (new local root)
  */
-Bool AVL_doubleLeftRotate(AVLNode *node);
+AVLNode *AVL_doubleLeftRotate(AVLNode *node);
 
 /**
- * @Brief Do a double right rotate in tree
+ * @brief Do a double right rotate in tree
  *
  * @param node Target to rotate
  *
- * @return Returns FALSE if the node is a NULL pointer or the left node is a
- * NULL pointer, else returns TRUE
+ * @return Returns NULL if the node is a NULL pointer or the left node is a
+ * NULL pointer, else returns the right child of the left node (new local root)
  */
-Bool AVL_doubleRightRotate(AVLNode *node);
+AVLNode *AVL_doubleRightRotate(AVLNode *node);
 
 /**
  * @brief Print the entire avl tree in defined order

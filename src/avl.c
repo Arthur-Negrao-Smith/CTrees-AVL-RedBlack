@@ -69,12 +69,12 @@ void AVL_destroyNode(AVLNode *node) {
   free(node);
 }
 
-Bool AVL_addLeftNode(AVLNode *father, AVLNode *child) {
+Bool AVL_addLeftNode(AVLNode *father, AVLNode *child, Bool destructive) {
   if (!father)
     return FALSE;
 
-  // to avoid wild pointer
-  if (father->left)
+  // to avoid memory leaks
+  if (father->left && destructive)
     AVL_destroyNodes(father->left);
 
   father->left = child;
@@ -82,12 +82,12 @@ Bool AVL_addLeftNode(AVLNode *father, AVLNode *child) {
   return TRUE;
 }
 
-Bool AVL_addRightNode(AVLNode *father, AVLNode *child) {
+Bool AVL_addRightNode(AVLNode *father, AVLNode *child, Bool destructive) {
   if (!father)
     return FALSE;
 
-  // to avoid wild pointer
-  if (father->right)
+  // to avoid memory leaks
+  if (father->right && destructive)
     AVL_destroyNodes(father->right);
 
   father->right = child;
@@ -119,19 +119,19 @@ int AVL_getDepth(AVLTree *tree) {
   return max(AVL_getHeight(tree->root->left), AVL_getHeight(tree->root->right));
 }
 
-Bool AVL_leftRotate(AVLNode *node) {
+AVLNode *AVL_leftRotate(AVLNode *node) {
   if (!node)
-    return FALSE;
+    return NULL;
 
   AVLNode *right_child = node->right;
   if (!right_child)
-    return FALSE;
+    return NULL;
 
   AVLNode *left_of_right_child = right_child->left;
 
   // realize the rotate
-  AVL_addLeftNode(right_child, node);
-  AVL_addRightNode(node, left_of_right_child);
+  AVL_addLeftNode(right_child, node, FALSE);
+  AVL_addRightNode(node, left_of_right_child, FALSE);
 
   // updating the height
   node->height = max(AVL_getHeight(node->left), AVL_getHeight(node->right)) + 1;
@@ -139,22 +139,22 @@ Bool AVL_leftRotate(AVLNode *node) {
       max(AVL_getHeight(right_child->left), AVL_getHeight(right_child->right)) +
       1;
 
-  return TRUE;
+  return right_child;
 }
 
-Bool AVL_rightRotate(AVLNode *node) {
+AVLNode *AVL_rightRotate(AVLNode *node) {
   if (!node)
-    return FALSE;
+    return NULL;
 
   AVLNode *left_child = node->left;
   if (!left_child)
-    return FALSE;
+    return NULL;
 
   AVLNode *right_of_left_child = left_child->right;
 
   // realize the rotate
-  AVL_addRightNode(left_child, node);
-  AVL_addLeftNode(node, right_of_left_child);
+  AVL_addRightNode(left_child, node, FALSE);
+  AVL_addLeftNode(node, right_of_left_child, FALSE);
 
   // updating the height
   node->height = max(AVL_getHeight(node->left), AVL_getHeight(node->right)) + 1;
@@ -162,35 +162,35 @@ Bool AVL_rightRotate(AVLNode *node) {
       max(AVL_getHeight(left_child->left), AVL_getHeight(left_child->right)) +
       1;
 
-  return TRUE;
+  return left_child;
 }
 
-Bool AVL_doubleLeftRotate(AVLNode *node) {
+AVLNode *AVL_doubleLeftRotate(AVLNode *node) {
   if (!node)
-    return FALSE;
+    return NULL;
 
   if (!node->right)
-    return FALSE;
+    return NULL;
 
   // do the double rotation
-  AVL_rightRotate(node);
-  AVL_leftRotate(node);
+  node = AVL_rightRotate(node);
+  node = AVL_leftRotate(node);
 
-  return TRUE;
+  return node;
 }
 
-Bool AVL_doubleRightRotate(AVLNode *node) {
+AVLNode *AVL_doubleRightRotate(AVLNode *node) {
   if (!node)
-    return FALSE;
+    return NULL;
 
   if (!node->left)
-    return FALSE;
+    return NULL;
 
   // do the double rotation
-  AVL_leftRotate(node);
-  AVL_rightRotate(node);
+  node = AVL_leftRotate(node);
+  node = AVL_rightRotate(node);
 
-  return TRUE;
+  return node;
 }
 
 AVLNode *AVL_insertNode(AVLNode *node, float data) {
@@ -199,6 +199,7 @@ AVLNode *AVL_insertNode(AVLNode *node, float data) {
   if (!node)
     return AVL_createNode(data);
 
+  // TODO: Implement frequency
   // positioning the new node
   if (data <= node->data)
     node->left = AVL_insertNode(node->left, data);
@@ -260,9 +261,81 @@ AVLNode *AVL_insert(AVLTree *tree, float data) {
   node = AVL_insertNode(tree->root, data);
 
   // if all occurs ok
-  if (node)
+  if (node) {
     tree->length++;
 
+    // update tree root, because it may have been rotated
+    tree->root = node;
+  }
+
+  return node;
+}
+
+AVLNode *findMinNode(AVLNode *node) {
+  // invalid argument (node) passed
+  if (!node)
+    return NULL;
+
+  // if the current node is the min value
+  if (!node->left)
+    return node;
+
+  // call recursively until don't have a left node
+  return AVL_findMinNode(node->left);
+}
+
+AVLNode *AVL_removeNode(AVLNode *node, float data) {
+  // stop condition: the tree don't have this data
+  if (!node)
+    return NULL;
+
+  AVLNode *removed_node;
+  // if the data is less than data of the current node
+  if (data < node->data) {
+    removed_node = AVL_removeNode(node->left, data);
+
+    // if the data is greater than data of the current node
+  } else if (data > node->data) {
+    removed_node = AVL_removeNode(node->right, data);
+
+    // else the current node is the correct
+  } else {
+
+    AVLNode *aux_node;
+    // have two childrens
+    if (node->left && node->right) {
+      aux_node = AVL_findMinNode(node->right);
+
+      node->data = aux_node->data;
+
+      // remove the min node
+      node->right = AVL_removeNode(node->right, aux_node->data);
+
+      // don't have childrens
+    } else if (!node->left && !node->right)
+
+      removed_node = node;
+  }
+
+  return removed_node;
+}
+
+AVLNode *AVL_remove(AVLTree *tree, float data) {
+  if (!tree)
+    return NULL;
+
+  if (!tree->root)
+    return NULL;
+
+  AVLNode *node = AVL_removeNode(tree->root, data);
+
+  // if don't finded
+  if (!node)
+    return NULL;
+
+  // TODO: Finalize the Remove and update the tree root
+
+  // removed node
   return node;
 }
 
