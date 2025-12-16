@@ -1,9 +1,9 @@
 #include "include/redblack.h"
 #include <stdlib.h>
 
-REDBLACKtree *REBLACK_create() {
-  REDBLACKtree *tree;
-  tree = (REDBLACKtree*)malloc(sizeof(REDBLACKtree));
+RBtree *REBLACK_create() {
+  RBtree *tree;
+  tree = (RBtree*)malloc(sizeof(RBtree));
 
   // for any error that might occur during memory allocation
   if (!tree)
@@ -16,9 +16,9 @@ REDBLACKtree *REBLACK_create() {
   return tree;
 }
 
-REDBLACKnode *REDBLACK_createnode(float data) {
-    REDBLACKnode *node;
-    node = (REDBLACKnode* )malloc(sizeof(REDBLACKnode));
+RBnode *RB_createnode(float data) {
+    RBnode *node;
+    node = (RBnode* )malloc(sizeof(RBnode));
 
     if (!node)
       return NULL;
@@ -27,12 +27,12 @@ REDBLACKnode *REDBLACK_createnode(float data) {
     node -> father = NULL;
     node -> left = NULL;
     node -> right = NULL;
-    node -> REDBLACKcolor = RED; // new node inicialize being red
+    node -> RBcolor = RED; // new node inicialize being red
 
     return node;
 }
 
-Bool REDBLACK_empty(REDBLACKtree *tree) {
+Bool RB_empty(RBtree *tree) {
     // if the pointer is null
     if (!tree)
        return TRUE;
@@ -43,8 +43,8 @@ Bool REDBLACK_empty(REDBLACKtree *tree) {
     return FALSE;
 }
 
-REDBLACK_leftRotation( REDBLACKtree *tree, REDBLACKnode *father ) {
-    REDBLACKnode *y = father->right; 
+RB_leftRotation( RBtree *tree, RBnode *father ) {
+    RBnode *y = father->right; 
     father->right = y->left;
 
     if (y->left != Nil) {
@@ -66,8 +66,8 @@ REDBLACK_leftRotation( REDBLACKtree *tree, REDBLACKnode *father ) {
     return 0;
 }
 
-REDBLACK_rightRotation(REDBLACKtree *tree, REDBLACKnode *father ) {
-    REDBLACKnode *y = father->left;
+RB_rightRotation(RBtree *tree, RBnode *father ) {
+    RBnode *y = father->left;
     father->left = y->right;
 
     if (y->right != Nil) {
@@ -89,10 +89,10 @@ REDBLACK_rightRotation(REDBLACKtree *tree, REDBLACKnode *father ) {
     return 0;
 }
 
-REDBLACK_insertion(REDBLACKtree *tree, float data) {
-    REDBLACKnode *node = REDBLACK_creatnode(data);
-    REDBLACKnode *y = Nil;
-    REDBLACKnode *x = tree->root;
+RB_insertion(RBtree *tree, float data) {
+    RBnode *node = RB_creatnode(data);
+    RBnode *y = Nil;
+    RBnode *x = tree->root;
 
     while(x != Nil) {
         y = x;
@@ -114,46 +114,46 @@ REDBLACK_insertion(REDBLACKtree *tree, float data) {
 
     node->left = Nil;
     node->right = Nil;
-    node -> REDBLACKcolor = RED;
+    node -> RBcolor = RED;
 }
 
-REDBLACK_insertionFixup(REDBLACKtree *tree, REDBLACKnode *node) {
-    REDBLACKnode *uncle;
-    while(node->father->REDBLACKcolor == RED) {
+RB_insertionFixup(RBtree *tree, RBnode *node) {
+    RBnode *uncle;
+    while(node->father->RBcolor == RED) {
         if(node->father == node->father->father->left) { 
             uncle = node->father->father->right;
-            if(uncle->REDBLACKcolor ==  RED) {
-                node->father->REDBLACKcolor = BLACK;
-                uncle->REDBLACKcolor = BLACK;
-                node->father->father->REDBLACKcolor = RED;
+            if(uncle->RBcolor ==  RED) {
+                node->father->RBcolor = BLACK;
+                uncle->RBcolor = BLACK;
+                node->father->father->RBcolor = RED;
                 node = node->father->father;
             } else if (node == node->father->right) {
                 node = node->father;
-                REDBLACK_leftRotation(tree, node);
+                RB_leftRotation(tree, node);
             }
 
-            node->father->REDBLACKcolor = BLACK;
-            node->father->father->REDBLACKcolor = RED;
-            REDBLACK_rightRotation(tree, node->father->father);
+            node->father->RBcolor = BLACK;
+            node->father->father->RBcolor = RED;
+            RB_rightRotation(tree, node->father->father);
         }
         else {
             uncle = node->father->father->left;
-            if(node->REDBLACKcolor == RED) {
-                node->father->REDBLACKcolor = BLACK;
-                node->REDBLACKcolor = BLACK;
-                node->father->father->REDBLACKcolor = RED;
+            if(node->RBcolor == RED) {
+                node->father->RBcolor = BLACK;
+                node->RBcolor = BLACK;
+                node->father->father->RBcolor = RED;
                 node = node->father->father;
             } else if(node == node->father->left) {
                 node = node->father;
-                REDBLACK_rightRotation(tree, node);
+                RB_rightRotation(tree, node);
             }
-            node->father->REDBLACKcolor = BLACK;
-            node->father->father->REDBLACKcolor = RED;
-            REDBLACK_leftRotation(tree, node->father->father);
+            node->father->RBcolor = BLACK;
+            node->father->father->RBcolor = RED;
+            RB_leftRotation(tree, node->father->father);
         }
     }
 
-    tree->root->REDBLACKcolor = BLACK;
+    tree->root->RBcolor = BLACK;
 
     return 0;
 }
