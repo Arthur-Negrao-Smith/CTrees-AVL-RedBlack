@@ -131,8 +131,10 @@ Bool RB_insert(RBtree *tree, float data) {
 void RB_insertionFixup(RBtree *tree, RBnode *node) {
     RBnode *uncle;
     while(node->father->RBcolor == RED) {
+
         if(node->father == node->father->father->left) { 
             uncle = node->father->father->right;
+
             if(uncle->RBcolor ==  RED) {
                 node->father->RBcolor = BLACK;
                 uncle->RBcolor = BLACK;
@@ -149,9 +151,10 @@ void RB_insertionFixup(RBtree *tree, RBnode *node) {
         }
         else {
             uncle = node->father->father->left;
-            if(node->RBcolor == RED) {
+            
+            if(uncle->RBcolor == RED) { //mudança na condicional de node para uncle
                 node->father->RBcolor = BLACK;
-                node->RBcolor = BLACK;
+                uncle->RBcolor = BLACK; //mudança aqui de node para uncle
                 node->father->father->RBcolor = RED;
                 node = node->father->father;
             } else if(node == node->father->left) {
