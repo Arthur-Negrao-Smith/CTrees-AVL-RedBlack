@@ -33,11 +33,13 @@ Bool RB_empty(RBtree *tree);
 Bool RB_insert(RBtree *tree, float data);
 Bool RB_delete(RBtree *tree, float data);
 
+RBnode *RB_search(RBtree *tree, float data); // de bool pra RBnode *
+
 void RB_leftRotation( RBtree *tree, RBnode *node );
 void RB_rightRotation( RBtree *tree, RBnode *node );
 
 void RB_insertionFixup(RBtree *tree, RBnode *node);
-void RB_minimumFixup(RBnode *node);
+RBnode *RB_minimumFixup(RBnode *node);
 void RB_transplant(RBtree *tree, RBnode *removedNode, RBnode *replacementNode);
 void RB_deleteFixup(RBtree *tree, RBnode *node);
 
