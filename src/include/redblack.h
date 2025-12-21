@@ -22,10 +22,9 @@ typedef struct RBnode {
 typedef struct {
     RBnode *root ; ///< Pointer to root node
     int length;    ///< Number of tree nodes
-    int black_height; ///< Number of the black height for balancing
 } RBtree; // raiz era pra ter cor em teoria e não coloquei ainda? não sei
 
-extern RBtree *Nil;
+extern RBnode *Nil;
 
 RBtree *RB_create();
 RBnode *RB_createnode(float data);
@@ -40,8 +39,8 @@ Bool RB_addRightNode(RBnode *father, RBnode *child);
 int RB_leftRotation( RBtree *tree, RBnode *father );
 int RB_rightRotation( RBtree *tree, RBnode *father );
 
-int RB_doubleLeftRotation( RBtree *tree, RBnode *father );
-int RB_doubleRightRotation( RBtree *tree, RBnode *father );
+int RB_insertionFixup(RBtree *tree, RBnode *node);
+int RB_deleteFixup(RBtree *tree, RBnode *node);
 
 void RB_print(RBtree *tree);
 #endif

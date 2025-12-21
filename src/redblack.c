@@ -1,7 +1,7 @@
 #include "include/redblack.h"
 #include <stdlib.h>
 
-RBtree *REBLACK_create() {
+RBtree *RB_create() {
   RBtree *tree;
   tree = (RBtree*)malloc(sizeof(RBtree));
 
@@ -9,8 +9,7 @@ RBtree *REBLACK_create() {
   if (!tree)
     return NULL;
 
-  tree->root = NULL;
-  tree->black_height = 0;
+  tree->root = Nil;
   tree->length = 0;
 
   return tree;
