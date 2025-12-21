@@ -1,6 +1,21 @@
 #include "include/redblack.h"
 #include <stdlib.h>
 
+RBnode *Nil = NULL;
+
+void RB_nodeNil() {
+    Nil = (RBnode*)malloc(sizeof(RBnode));
+    if (!Nil)
+        return;
+    
+    
+    Nil->father = NULL;
+    Nil->left = NULL;
+    Nil->right = NULL;
+    Nil->RBcolor = BLACK;
+}
+
+
 RBtree *RB_create() {
   RBtree *tree;
   tree = (RBtree*)malloc(sizeof(RBtree));
@@ -23,9 +38,9 @@ RBnode *RB_createnode(float data) {
       return NULL;
 
     node -> data = data;
-    node -> father = NULL;
-    node -> left = NULL;
-    node -> right = NULL;
+    node -> father = Nil;
+    node -> left = Nil;
+    node -> right = Nil;
     node -> RBcolor = RED; // new node inicialize being red
 
     return node;
@@ -36,87 +51,84 @@ Bool RB_empty(RBtree *tree) {
     if (!tree)
        return TRUE;
     // if the tree don't have a root
-    if (!tree->root)
+    if (tree->root == Nil)
        return TRUE;     
     // It's not empty
     return FALSE;
 }
 
-RB_leftRotation( RBtree *tree, RBnode *father ) {
-    RBnode *y = father->right; 
-    father->right = y->left;
+void RB_leftRotation( RBtree *tree, RBnode *node ) {
+    RBnode *rightChild = node->right; 
+    node->right = rightChild->left;
 
-    if (y->left != Nil) {
-      y->left->father = father;
+    if (rightChild->left != Nil) {
+      rightChild->left->father = node;
     }
-    y->father = father->father;
-    if (father->father == Nil) {
-        tree->root = y;
+    rightChild->father = node->father;
+    if (node->father == Nil) {
+        rightChild->father = Nil;
+        tree->root = rightChild;
     }
-    else if(father == father->father->left) {
-        father->father->left = y;
+    else if(node == node->father->left) {
+        node->father->left = rightChild;
     }
     else {
-        father->father->left = y;
+        node->father->right = rightChild;
     }
-    y->left = father;
-    father->father = y;
+    rightChild->left = node;
+    node->father = rightChild;
 
-    return 0;
 }
 
-RB_rightRotation(RBtree *tree, RBnode *father ) {
-    RBnode *y = father->left;
-    father->left = y->right;
+void RB_rightRotation(RBtree *tree, RBnode *node ) {
+    RBnode *leftChild = node->left;
+    node->left = leftChild->right;
 
-    if (y->right != Nil) {
-        y->right->father = father;
+    if (leftChild->right != Nil) {
+        leftChild->right->father = node;
     }
-    y->father = father->father;
-    if (father->father == Nil) {
-        tree = y;
+    leftChild->father = node->father;
+    if (node->father == Nil) {
+        leftChild->father = Nil;
+        tree->root = leftChild;
     }
-    else if(father==father->father->right) {
-        father->father->right = y;
+    else if(node == node->father->right) {
+        node->father->right = leftChild;
     }
     else {
-        father->father->left = y;
+        node->father->left = leftChild;
     }
-    y -> right = father;
-    father->father = y;
+    leftChild -> right = node;
+    node->father = leftChild;
 
-    return 0;
 }
 
-RB_insertion(RBtree *tree, float data) {
-    RBnode *node = RB_creatnode(data);
-    RBnode *y = Nil;
-    RBnode *x = tree->root;
+Bool RB_insert(RBtree *tree, float data) {
+    RBnode *node = RB_createnode(data);
+    RBnode *parent = Nil;
+    RBnode *current = tree->root;
 
-    while(x != Nil) {
-        y = x;
-        if(node->data < x->data) {
-            x = x->left;
+    while(current != Nil) {
+        parent = current;
+        if(node->data < current->data) {
+            current = current->left;
         } else {
-            x = x->right;
+            current = current->right;
         }
     }
 
-    node->father = y;
-    if(y == Nil) {
+    node->father = parent;
+    if(parent == Nil) {
         tree->root = node;
-    } else if(node->data < y->data) {
-        y->left = node;       
+    } else if(node->data < parent->data) {
+        parent->left = node;       
     } else {
-        y->right = node;
+        parent->right = node;
     }
 
-    node->left = Nil;
-    node->right = Nil;
-    node -> RBcolor = RED;
 }
 
-RB_insertionFixup(RBtree *tree, RBnode *node) {
+void RB_insertionFixup(RBtree *tree, RBnode *node) {
     RBnode *uncle;
     while(node->father->RBcolor == RED) {
         if(node->father == node->father->father->left) { 
@@ -154,5 +166,4 @@ RB_insertionFixup(RBtree *tree, RBnode *node) {
 
     tree->root->RBcolor = BLACK;
 
-    return 0;
 }

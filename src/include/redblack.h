@@ -33,14 +33,11 @@ Bool RB_empty(RBtree *tree);
 Bool RB_insert(RBtree *tree, float data);
 Bool RB_delete(RBtree *tree, float data);
 
-Bool RB_addLeftNode(RBnode *father, RBnode *child);
-Bool RB_addRightNode(RBnode *father, RBnode *child);
+void RB_leftRotation( RBtree *tree, RBnode *node );
+void RB_rightRotation( RBtree *tree, RBnode *node );
 
-int RB_leftRotation( RBtree *tree, RBnode *father );
-int RB_rightRotation( RBtree *tree, RBnode *father );
-
-int RB_insertionFixup(RBtree *tree, RBnode *node);
-int RB_deleteFixup(RBtree *tree, RBnode *node);
+void RB_insertionFixup(RBtree *tree, RBnode *node);
+void RB_deleteFixup(RBtree *tree, RBnode *node);
 
 void RB_print(RBtree *tree);
 #endif
