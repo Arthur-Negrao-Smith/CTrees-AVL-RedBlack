@@ -9,10 +9,10 @@ void RB_nodeNil() {
         return;
     
     
-    Nil->father = NULL;
-    Nil->left = NULL;
-    Nil->right = NULL;
     Nil->RBcolor = BLACK;
+    Nil->father = Nil;
+    Nil->left = Nil;
+    Nil->right = Nil;
 }
 
 
@@ -37,11 +37,11 @@ RBnode *RB_createnode(float data) {
     if (!node)
       return NULL;
 
+    node -> RBcolor = RED; // new node inicialize being red
     node -> data = data;
     node -> father = Nil;
     node -> left = Nil;
     node -> right = Nil;
-    node -> RBcolor = RED; // new node inicialize being red
 
     return node;
 }
@@ -104,7 +104,14 @@ void RB_rightRotation(RBtree *tree, RBnode *node ) {
 }
 
 Bool RB_insert(RBtree *tree, float data) {
+    if ( !tree )
+        return FALSE;
+
     RBnode *node = RB_createnode(data);
+
+    if (!node )
+        return FALSE;
+
     RBnode *parent = Nil;
     RBnode *current = tree->root;
 
@@ -125,50 +132,56 @@ Bool RB_insert(RBtree *tree, float data) {
     } else {
         parent->right = node;
     }
+    RB_insertionFixup(tree, node);
+    tree->length++;
 
+    return TRUE;
 }
 
 void RB_insertionFixup(RBtree *tree, RBnode *node) {
     RBnode *uncle;
-    while(node->father->RBcolor == RED) {
+    while ( node->father->RBcolor == RED ) {
 
-        if(node->father == node->father->father->left) { 
+        if ( node->father == node->father->father->left ) { 
             uncle = node->father->father->right;
 
-            if(uncle->RBcolor ==  RED) {
+            if ( uncle->RBcolor ==  RED ) {
                 node->father->RBcolor = BLACK;
                 uncle->RBcolor = BLACK;
                 node->father->father->RBcolor = RED;
                 node = node->father->father;
-            } else if (node == node->father->right) {
-                node = node->father;
-                RB_leftRotation(tree, node);
-            }
+            } else {      
+                if ( node == node->father->right ) {
+                    node = node->father;
+                    RB_leftRotation(tree, node);
+                }
 
             node->father->RBcolor = BLACK;
             node->father->father->RBcolor = RED;
             RB_rightRotation(tree, node->father->father);
+            }   
         }
         else {
             uncle = node->father->father->left;
             
-            if(uncle->RBcolor == RED) { //mudança na condicional de node para uncle
+            if ( uncle->RBcolor == RED ) { //mudança na condicional de node para uncle
                 node->father->RBcolor = BLACK;
                 uncle->RBcolor = BLACK; //mudança aqui de node para uncle
                 node->father->father->RBcolor = RED;
                 node = node->father->father;
-            } else if(node == node->father->left) {
-                node = node->father;
-                RB_rightRotation(tree, node);
-            }
+            } else {
+                if ( node == node->father->left) {
+                    node = node->father;
+                    RB_rightRotation(tree, node);
+                }
             node->father->RBcolor = BLACK;
             node->father->father->RBcolor = RED;
             RB_leftRotation(tree, node->father->father);
+            }
         }
     }
 
     tree->root->RBcolor = BLACK;
-
 }
 
 RBnode *RB_search( RBtree *tree, float data ) {
@@ -189,11 +202,11 @@ void RB_transplant( RBtree *tree, RBnode *removedNode, RBnode *replacementNode )
     if ( removedNode->father == Nil ) {
         tree->root = replacementNode;
     } else if (removedNode == removedNode->father->left) {
-        removedNode->father = replacementNode;
+        removedNode->father->left = replacementNode;
     } else {
         removedNode->father->right = replacementNode;
     }
-    replacementNode = removedNode->father;
+    replacementNode->father = removedNode->father;
 }
 
 RBnode *RB_minimumFixup( RBnode *node) {
@@ -215,7 +228,7 @@ Bool RB_delete( RBtree *tree, float data ) {
 
     if ( searchNode->left == Nil ) {
         replacementNode = searchNode->right;
-        RB_transplant(tree, searchNode, searchNode->right)
+        RB_transplant(tree, searchNode, searchNode->right);
     } else if ( searchNode->right == Nil ) {
         replacementNode = searchNode->left;
         RB_transplant(tree, searchNode, searchNode->left);
@@ -229,7 +242,7 @@ Bool RB_delete( RBtree *tree, float data ) {
         } else {
             RB_transplant(tree, deletedNode, deletedNode->right);
             deletedNode->right = searchNode->right;
-            deletedNode->right->father = y;
+            deletedNode->right->father = deletedNode;
         }
 
         RB_transplant(tree, searchNode, deletedNode);
@@ -303,10 +316,30 @@ void RB_deleteFixup( RBtree *tree, RBnode *node ) {
                 brother->left->RBcolor = BLACK;
                 RB_rightRotation(tree, node->father);
                 node = tree->root;
-        }
+                }
+            }
     }
+node->RBcolor = BLACK;
+}
 
-    node->RBcolor = BLACK;
-    
-    }
+static void RB_printInOrder(RBnode *node) {
+    if (node == Nil)
+        return;
+
+    RB_printInOrder(node->left);
+
+    printf("%.2f(%c) ",
+           node->data,
+           node->RBcolor == RED ? 'R' : 'B');
+
+    RB_printInOrder(node->right);
+}
+
+void RB_print(RBtree *tree) {
+    if (!tree || tree->root == Nil)
+        return;
+
+    printf("[ ");
+    RB_printInOrder(tree->root);
+    printf("]");
 }
