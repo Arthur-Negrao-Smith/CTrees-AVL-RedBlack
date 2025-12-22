@@ -1,3 +1,9 @@
+/*
+ * Autores: Arthur Negrão Smith e Taygo Cezar Costa Pereira
+ * Arquivo: main.c
+ * Descrição: Programa principal para executar as árvores AVL e Red-Black.
+ */
+
 #include "include/avl.h"
 #include "include/redblack.h"
 #include <stdio.h>

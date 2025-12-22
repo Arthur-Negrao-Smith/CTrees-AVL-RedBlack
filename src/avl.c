@@ -1,3 +1,9 @@
+/*
+ * Autores: Arthur Negrão Smith e Taygo Cezar Costa Pereira
+ * Arquivo: avl.c
+ * Descrição: Implementação da árvore AVL.
+ */
+
 #include "include/avl.h"
 #include <stdio.h>
 #include <stdlib.h>

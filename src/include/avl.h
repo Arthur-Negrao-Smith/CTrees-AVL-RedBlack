@@ -1,3 +1,9 @@
+/*
+ * Autores: Arthur Negrão Smith e Taygo Cezar Costa Pereira
+ * Arquivo: avl.h
+ * Descrição: Definições e protótipos da árvore AVL.
+ */
+
 #ifndef AVL_TREE_H
 #define AVL_TREE_H
 

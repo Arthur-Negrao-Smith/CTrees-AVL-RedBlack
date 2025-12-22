@@ -1,3 +1,9 @@
+/*
+ * Autores: Arthur Negrão Smith e Taygo Cezar Costa Pereira
+ * Arquivo: redblack.c
+ * Descrição: Implementação da árvore Red-Black.
+ */
+
 #include "include/redblack.h"
 #include <stdlib.h>
 #include <stdio.h>

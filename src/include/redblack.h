@@ -1,3 +1,9 @@
+/*
+ * Autores: Arthur Negrão Smith e Taygo Cezar Costa Pereira
+ * Arquivo: redblack.h
+ * Descrição: Definições e protótipos da árvore Red-Black.
+ */
+
 #ifndef RB_TREE_H
 #define RB_TREE_H
 #include "avl.h"
