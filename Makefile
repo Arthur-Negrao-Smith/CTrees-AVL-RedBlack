@@ -4,7 +4,7 @@ INCLUDE = ./include
 
 
 TARGET = src/main
-LIBS = src/avl.o
+LIBS = src/avl.o src/redblack.o
 
 .PHONY: all clean run
 
