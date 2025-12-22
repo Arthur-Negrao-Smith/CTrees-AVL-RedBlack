@@ -49,12 +49,13 @@ O projeto utiliza-se da ferramenta de compilação `make` para facilitar o proce
 O projeto possuí um arquivo `Makefile` para automatizar o processo de compilação e execução, permitindo que o código seja compilado de forma simples e portátil em outros sistemas operacionais. 
 
 Comandos para uso:
+```
+make            # Compila o projeto
       
-    make run        # Roda os algoritmos caso já tenham sido compilados
+make run        # Compila e roda os algoritmos
 
-    make clean      # Limpa todos os arquivos objetos e binários do projeto
-
-    make help       # Mostra todos os comandos do arquivo Makefile
+make clean      # Limpa todos os arquivos objetos e binários do projeto
+```
 
 ## Autores
 
