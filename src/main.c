@@ -57,7 +57,50 @@ int main(int argc, char *argv[]) {
 
   printf("\n\nDestroying the tree...\n");
   AVL_destroyTree(tree);
+  // Red-Black Tree
+  printf("\n\n--- Now Testing Red Black Tree ---\n\n");
 
+  RBtree *rbtree = RB_create();
+  printf("Creating the Tree...\n");
+  if (!rbtree) {
+      printf("Error to create the Tree\n");
+      return 1;
+  }
+
+  for (int i = 0; i < (sizeof(numbers_to_add) / sizeof(numbers_to_add[0])); i++) {
+      printf("Adding number %f in Red Black Tree...\n", numbers_to_add[i]);
+      RB_insert(rbtree, numbers_to_add[i]);
+  }
+
+  printf("\nPrinting the Red Black Tree: ");
+  RB_print(rbtree);
+  printf("\n");
+
+  printf("Searching the number %f...\n", numbers_to_add[2]);
+  RBnode *aux_node = RB_search(rbtree, numbers_to_add[2]);
+  if (aux_node != Nil)
+      printf("The result is: %f\n", aux_node->data);
+  else 
+      printf("Failed to search for node...\n");
+
+  printf("\nThe current Tree root is %f and the length of the Red Black tree is %d\n",
+          rbtree->root->data, rbtree->length);
+
+  printf("\nRemoving the %f number...\n", numbers_to_add[1]);
+  Bool removed = RB_delete(rbtree, numbers_to_add[1]);
+
+  if (removed)
+      printf("The node removed is %f and the length of the tree is: %d\n",
+              numbers_to_add[1], rbtree->length);
+  else 
+      printf("Failed to remove a node...\n");
+
+  printf("\nPrint all the Red Black Tree: ");
+  RB_print(rbtree);
+  printf("\n");
+
+  printf("\nDestroying the Tree...\n");
+  RB_destroy(rbtree);
 
 
   return 0;
