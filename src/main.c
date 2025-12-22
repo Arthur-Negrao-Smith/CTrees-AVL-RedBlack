@@ -59,7 +59,7 @@ int main(int argc, char *argv[]) {
   AVL_destroyTree(tree);
   // Red-Black Tree
   printf("\n\n--- Now Testing Red Black Tree ---\n\n");
-
+  RB_nodeNil();
   RBtree *rbtree = RB_create();
   printf("Creating the Tree...\n");
   if (!rbtree) {

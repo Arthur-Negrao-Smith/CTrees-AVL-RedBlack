@@ -27,6 +27,7 @@ typedef struct {
 
 extern RBnode *Nil;
 
+void RB_nodeNil();
 RBtree *RB_create();
 RBnode *RB_createnode(float data);
 

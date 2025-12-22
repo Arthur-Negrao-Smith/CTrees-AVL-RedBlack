@@ -4,6 +4,17 @@
 
 RBnode *Nil = NULL;
 
+void RB_nodeNil() {
+    Nil = (RBnode*)malloc(sizeof(RBnode));
+    if (!Nil)
+        return;
+
+    Nil->RBcolor = BLACK;
+    Nil->father = Nil;
+    Nil->left = Nil;
+    Nil->right = Nil;
+}
+
 RBtree *RB_create() {
   RBtree *tree;
   tree = (RBtree*)malloc(sizeof(RBtree));
@@ -342,7 +353,8 @@ void RB_destroyNode( RBnode *node ) {
 void RB_destroyNodes( RBnode *node ) {
     if (!node)
         return;
-    
+    if (node == Nil)
+        return;
     RB_destroyNodes(node->left);
     RB_destroyNodes(node->right);
     RB_destroyNode(node);
@@ -354,6 +366,7 @@ void RB_destroy( RBtree *tree) {
 
     RB_destroyNodes(tree->root);
     free(tree);
+    free(Nil);
 }
 
 
