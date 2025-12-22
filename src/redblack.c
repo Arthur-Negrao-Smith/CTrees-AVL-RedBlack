@@ -132,7 +132,6 @@ Bool RB_insert(RBtree *tree, float data) {
         parent->right = node;
     }
     RB_insertionFixup(tree, node);
-    tree->length++;
 
     return TRUE;
 }
@@ -208,9 +207,9 @@ void RB_transplant( RBtree *tree, RBnode *removedNode, RBnode *replacementNode )
     replacementNode->father = removedNode->father;
 }
 
-RBnode *RB_minimumFixup( RBnode *node) {
-    while ( node->left != Nil) {
-        node = node->left;
+RBnode *RB_maxFixup( RBnode *node) { //change do max
+    while ( node->right != Nil) {
+        node = node->right;
     }
     return node;
 }
@@ -232,7 +231,7 @@ Bool RB_delete( RBtree *tree, float data ) {
         replacementNode = searchNode->left;
         RB_transplant(tree, searchNode, searchNode->left);
     } else {
-        deletedNode = RB_minimumFixup(searchNode->right);
+        deletedNode = RB_maxFixup(searchNode->left); //change right to left
         deletedColor = deletedNode->RBcolor;
         replacementNode = deletedNode->right;
 
@@ -246,7 +245,7 @@ Bool RB_delete( RBtree *tree, float data ) {
 
         RB_transplant(tree, searchNode, deletedNode);
         deletedNode->left = searchNode->left;
-        deletedNode->right->father = deletedNode;
+        deletedNode->left->father = deletedNode; // Fixed line: right to left
         deletedNode->RBcolor = searchNode->RBcolor;
     }
 
@@ -369,4 +368,23 @@ void RB_destroy( RBtree *tree) {
     free(Nil);
 }
 
+int RB_blackLength(RBnode *node) {
+    if (node == Nil) {
+        return 0;
+    }
 
+    int leftLength = RB_blackLength(node->left);
+    int rightLength = RB_blackLength(node->right);
+
+    if (leftLength != rightLength) {
+        return -1; // It means that de black length isnt the same for both subtrees
+    }
+
+    return leftLength + (node->RBcolor == BLACK ? 1 : 0);
+}
+
+int RB_treeLength(RBtree *tree) {
+    if (!tree)
+        return 0;
+    return RB_blackLength(tree->root);
+}

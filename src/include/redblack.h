@@ -41,13 +41,16 @@ void RB_leftRotation( RBtree *tree, RBnode *node );
 void RB_rightRotation( RBtree *tree, RBnode *node );
 
 void RB_insertionFixup(RBtree *tree, RBnode *node);
-RBnode *RB_minimumFixup(RBnode *node);
+RBnode *RB_maxFixup(RBnode *node);
 void RB_transplant(RBtree *tree, RBnode *removedNode, RBnode *replacementNode);
 void RB_deleteFixup(RBtree *tree, RBnode *node);
 
 void RB_destroy(RBtree *tree);
 void RB_destroyNode(RBnode *node);
 void RB_destroyNodes(RBnode *node);
+
+int RB_blackLength(RBnode *node);
+int RB_treeLength(RBtree *tree);
 
 void RB_print(RBtree *tree);
 #endif

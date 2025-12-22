@@ -59,6 +59,7 @@ int main(int argc, char *argv[]) {
   AVL_destroyTree(tree);
   // Red-Black Tree
   printf("\n\n--- Now Testing Red Black Tree ---\n\n");
+  printf("Warning: The Red Black Tree use the predecessor when deleting a node with two children\n\n");
   RB_nodeNil();
   RBtree *rbtree = RB_create();
   printf("Creating the Tree...\n");
@@ -83,25 +84,46 @@ int main(int argc, char *argv[]) {
   else 
       printf("Failed to search for node...\n");
 
-  printf("\nThe current Tree root is %f and the length of the Red Black tree is %d\n",
-          rbtree->root->data, rbtree->length);
+  printf("\nThe current Tree root is %f\n",
+          rbtree->root->data);
+  
+  // Checking the black length of the tree
+  int blackLength = RB_treeLength(rbtree);
+
+  if (blackLength == -1) {
+      printf("Red Black Tree is not valid(Length is diferent in each subtree)\n");
+  } else {
+      printf("The black length of the Tree is = %d\n", blackLength);
+  }
 
   printf("\nRemoving the %f number...\n", numbers_to_add[1]);
   Bool removed = RB_delete(rbtree, numbers_to_add[1]);
 
-  if (removed)
-      printf("The node removed is %f and the length of the tree is: %d\n",
-              numbers_to_add[1], rbtree->length);
-  else 
-      printf("Failed to remove a node...\n");
-
+  if (removed) {
+    blackLength = RB_treeLength(rbtree);
+    printf("The node removed is %f and the length of the tree is: %d\n",
+              numbers_to_add[1], blackLength);
+  } else 
+    printf("Failed to remove a node...\n");
+  
   printf("\nPrint all the Red Black Tree: ");
   RB_print(rbtree);
   printf("\n");
 
+  printf("\nThe current Tree root is %f\n",
+          rbtree->root->data);
+  
+  // Checking the black length of the tree
+  blackLength = RB_treeLength(rbtree);
+
+  if (blackLength == -1) {
+      printf("Red Black Tree is not valid(Length is diferent in each subtree)\n");
+  } else {
+      printf("The black length of the Tree is = %d\n", blackLength);
+  }
+
   printf("\nDestroying the Tree...\n");
   RB_destroy(rbtree);
-
 
   return 0;
 }
