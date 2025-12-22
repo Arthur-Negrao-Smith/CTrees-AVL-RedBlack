@@ -1,8 +1,9 @@
 #ifndef RB_TREE_H
 #define RB_TREE_H
+#include "avl.h"
 
 typedef enum { RED , BLACK } RBcolor;
-typedef enum { FALSE = 0, TRUE = 1 } Bool;
+
 
 /** 
  *@brief Struct to represent the Red-Black node

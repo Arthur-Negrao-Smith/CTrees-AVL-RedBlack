@@ -1,20 +1,8 @@
 #include "include/redblack.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 RBnode *Nil = NULL;
-
-void RB_nodeNil() {
-    Nil = (RBnode*)malloc(sizeof(RBnode));
-    if (!Nil)
-        return;
-    
-    
-    Nil->RBcolor = BLACK;
-    Nil->father = Nil;
-    Nil->left = Nil;
-    Nil->right = Nil;
-}
-
 
 RBtree *RB_create() {
   RBtree *tree;
@@ -364,7 +352,7 @@ void RB_destroy( RBtree *tree) {
     if (!tree)
         return;
 
-    RB_destroynodes(tree->root);
+    RB_destroyNodes(tree->root);
     free(tree);
 }
 
