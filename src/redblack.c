@@ -343,3 +343,29 @@ void RB_print(RBtree *tree) {
     RB_printInOrder(tree->root);
     printf("]");
 }
+
+void RB_destroyNode( RBnode *node ) {
+    if (!node) 
+        return;
+    
+    free(node);
+}
+
+void RB_destroyNodes( RBnode *node ) {
+    if (!node)
+        return;
+    
+    RB_destroyNodes(node->left);
+    RB_destroyNodes(node->right);
+    RB_destroyNode(node);
+}
+
+void RB_destroy( RBtree *tree) {
+    if (!tree)
+        return;
+
+    RB_destroynodes(tree->root);
+    free(tree);
+}
+
+

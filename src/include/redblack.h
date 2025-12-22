@@ -43,6 +43,10 @@ RBnode *RB_minimumFixup(RBnode *node);
 void RB_transplant(RBtree *tree, RBnode *removedNode, RBnode *replacementNode);
 void RB_deleteFixup(RBtree *tree, RBnode *node);
 
+void RB_destroy(RBtree *tree);
+void RB_destroyNode(RBnode *node);
+void RB_destroyNodes(RBnode *node);
+
 void RB_print(RBtree *tree);
 #endif
 
